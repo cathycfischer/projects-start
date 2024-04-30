@@ -1,43 +1,178 @@
-/* general text formatting */
-
-
-body {
-   font-family: "Roboto", Verdana, Arial, sans-serif;
-   font-size: 100%;
- background-color: #ECEFF1;    
-}
-
-section {
-   background-color: white;
-   margin: 1em 4em 1em 4em;
-   border: solid 1pt black;
-
-}
-section h3 {
-  color: white;
-  padding: 0.75rem;
-  background-color: #263238; 
-}
-
-.status {
-    border-radius: 0.25rem;
-    padding: 3px;
-    color: white;
-    
-}
-.status-processing {
-    background-color:    #E65100;    
-}
-.status-shipped {
-    background-color:   #4CAF50;    
-}
-.status-pending {
-    background-color:    #03A9F4;    
-}
-
-
-
-/* table formatting -- you will add these */
-
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Chapter 5</title>
+    <style>
+        /* General text formatting */
+        body {
+            font-family: "Roboto", Verdana, Arial, sans-serif;
+            font-size: 100%;
+            background-color: #ECEFF1;
+        }
+        section {
+            background-color: white;
+            margin: 1em 4em 1em 4em;
+            border: solid 1pt black;
+        }
+        section h3 {
+            color: white;
+            padding: 0.75rem;
+            background-color: #263238;
+        }
+        .status {
+            border-radius: 0.25rem;
+            padding: 3px;
+            color: white;
+        }
+        .status-processing {
+            background-color: #E65100;
+        }
+        .status-shipped {
+            background-color: #4CAF50;
+        }
+        .status-pending {
+            background-color: #03A9F4;
+        }
+        /* Table formatting */
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .order-table th, .order-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .order-table th {
+            background-color: #f2f2f2;
+        }
+        /* Form formatting */
+        form {
+            margin-top: 20px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        form input[type="text"], form select, form input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        form button {
+            padding: 10px 20px;
+            background-color: purple; /* Changed to thick purple */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #6A1B9A; /* Hover color */
+        }
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            background-color: #03A9F4;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h3>Data</h3>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Country</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>USA</td>
+                    <td><span class="status status-pending">Pending</span></td>
+                    <td>2024-02-18</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" style="width: 0;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <h3>Revise</h3>
+        <form id="myForm" action="https://www.randyconnolly.com/tests/process.php" method="GET" onsubmit="updateProgress()">
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" id="customer_name" name="customer_name" required>
+            <label for="country">Country:</label>
+            <select id="country" name="country" required>
+                <option value="USA">USA</option>
+                <option value="Canada">Canada</option>
+                <option value="UK">UK</option>
+                <!-- Add more countries as needed -->
+            </select>
+            <label for="status">Status:</label>
+            <div>
+                <input type="radio" id="pending" name="status" value="pending" checked>
+                <label for="pending">Pending</label>
+                <input type="radio" id="processing" name="status" value="processing">
+                <label for="processing">Processing</label>
+                <input type="radio" id="shipped" name="status" value="shipped">
+                <label for="shipped">Shipped</label>
+            </div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <h1>Form Input</h1>
+    <h2>GET Data</h2>
+    <?php
+    if (count($_GET) == 0)
+        echo "<p><em>There are no GET variables</em></p>";
+    foreach ($_GET as $key => $value) {
+        echo "<strong>" . $key . "=</strong>" . $value . "</br>";
+    }
+    ?>
+    <h2>POST Data</h2>
+    <?php
+    if (count($_POST) == 0)
+        echo "<p><em>There are no POST variables</em></p>";
+    foreach ($_POST as $key => $value) {
+        echo "<strong>" . $key . "=</strong>" . $value . "</br>";
+    }
+    ?>
+    <script>
+        function updateProgress() {
+            var status = document.querySelector('input[name="status"]:checked').value;
+            var progressBar = document.querySelector(".progress-bar-inner");
+            if (status === "pending") {
+                progressBar.style.width = "0";
+            } else if (status === "processing") {
+                progressBar.style.width = "50%";
+            } else if (status === "shipped") {
+                progressBar.style.width = "100%";
+            }
+            return true; // Allow form submission to proceed
+        }
+    </script>
+</body>
+</html>
